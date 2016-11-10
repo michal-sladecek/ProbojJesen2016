@@ -1,0 +1,1 @@
+make && ./server/server zaznamy/01 mapy/simple.ppm klienti/template/ klienti/template/ && ./spusti_observer zaznamy/01/
