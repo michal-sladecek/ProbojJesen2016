@@ -1,3 +1,7 @@
 zaznamy
 *.o
+server/server
+klienti/template/hrac
+klienti/template/klient.tar.gz
+
 
