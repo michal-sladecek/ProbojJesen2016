@@ -10,9 +10,9 @@ using namespace std;
 
 int ja = -1;
 
-const double STRACH = 200;
-const double STRACHINY = -1000;
-const double AGRESIVITA = 1000;
+const double STRACH = 400;
+const double STRACHINY = -10;
+const double AGRESIVITA = 2000;
 const double ODSEBA = -1000;
 const double KAMEN = 5;
 const double SPEED = -1000;
@@ -273,7 +273,7 @@ int main() {
 		}
 		for (int x = 0; x < gs.width; x++) {
 			for (int y = 0; y < gs.height; y++) {
-				if (gs.get_block(x, y).owned_by == ja) ohodnotenePolicka[x + 1][y + 1] += currentLength*STRACH;
+				if (gs.get_block(x, y).owned_by == ja) ohodnotenePolicka[x + 1][y + 1] += currentLength*currentLength*STRACH;
 			}
 		}
 
