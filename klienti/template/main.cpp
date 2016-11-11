@@ -10,11 +10,11 @@ using namespace std;
 
 int ja = -1;
 
-const double STRACH = 50;
+const double STRACH = 100;
 const double AGRESIVITA = 10;
 const double ODSEBA = -100;
 const double KAMEN = 5;
-const double SPEED = 5;
+const double SPEED = -1000;
 const double NAVNADA = 1000;
 const double NUM_NAVNAD = 5;
 const double MIN_DIST = 2;
