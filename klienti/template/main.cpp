@@ -119,7 +119,7 @@ void vytrat(vector<vector<double> >&vstup, double konst, int iter)
 }
 
 
-vector<vector<int> > funkcia1(game_state vstup)
+vector<vector<int> > funkcia1(game_state vstup, int ja)
 {
     queue<int>Q;
     int a, b, c, na, nb, r=vstup.width, s=vstup.height;
@@ -143,6 +143,7 @@ vector<vector<int> > funkcia1(game_state vstup)
                 Q.push(i);
                 Q.push(j);
                 Q.push(0);
+                mat1[i][j]=0;
             }
         }
     }
@@ -154,10 +155,7 @@ vector<vector<int> > funkcia1(game_state vstup)
         c=Q.front();Q.pop();
         
         //actual = vstup.get_block(a, b);
-        
-        if(mat1[a][b] == -1)
-        {
-            mat1[a][b]=c;
+            //mat1[a][b]=c;
             for(int k=0;k<4;++k)
             {
                 na=a+dx[k];
@@ -167,9 +165,9 @@ vector<vector<int> > funkcia1(game_state vstup)
                     Q.push(na);
                     Q.push(nb);
                     Q.push(c+1);
+                    mat1[na][nb]=c+1;
                 }
             }
-        }
     }
     
     return mat1;
@@ -195,7 +193,21 @@ int main() {
 		vector<vector<double> > ohodnotenePolicka(gs.width + 2, vector<double> (gs.height + 2, 0));
 		int currentLength = 0;
 
-                prve = funkcia1(gs);
+                vector<vector<int> > V = funkcia1(gs, ja);
+		bool bojimSa = false;
+                
+                for(auto p : gs.players){
+			if(!p.alive)V[p.position.x][p.position.y]=10000000;
+                }
+                
+		for(auto p : gs.players){
+			if(V[p.position.x][p.position.y] < currentLength*3){
+				cerr << V[p.position.x][p.position.y] << "\n";
+				bojimSa = true;
+			}
+		}
+                
+                //prve = funkcia1(gs);
                 
                 for(int i = 0;i<gs.players.size();++i)
                 {
@@ -276,14 +288,7 @@ int main() {
 				if (gs.get_block(x, y).owned_by == ja) ohodnotenePolicka[x + 1][y + 1] += currentLength*STRACH;
 			}
 		}
-		vector<vector<int> > V = funkcia1(gs);
-		bool bojimSa = false;
-		for(auto p : gs.players){
-			if(V[p.position.x][p.position.y] < currentLength*3){
-				cerr << V[p.position.x][p.position.y] << "\n";
-				bojimSa = true;
-			}
-		}
+		
 		if(bojimSa){
 			for (int x = 0; x < gs.width; x++) {
 				for (int y = 0; y < gs.height; y++) {
