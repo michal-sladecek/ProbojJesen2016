@@ -10,13 +10,14 @@ using namespace std;
 
 int ja = -1;
 
-const double STRACH = 100;
+const double STRACH = 400;
+const double STRACHINY = -1000;
 const double AGRESIVITA = 10;
-const double ODSEBA = -100;
+const double ODSEBA = -1000;
 const double KAMEN = 5;
 const double SPEED = -1000;
-const double NAVNADA = 1000;
-const double NUM_NAVNAD = 5;
+const double NAVNADA = 3000;
+const double NUM_NAVNAD = 3;
 const double MIN_DIST = 2;
 const double MAX_DIST = 5;
 const double NEPRECHODNE = -10;
@@ -202,11 +203,12 @@ int main() {
 		}
 
 		for(auto p: gs.players){
-			ohodnotenePolicka[p.position.x + 1][p.position.y + 1] += -STRACH*currentLength*10;
+			ohodnotenePolicka[p.position.x + 1][p.position.y + 1] += STRACHINY*currentLength*10;
 		}
 
 		for(auto p: navnady){
 			if(gs.get_block(p.first - 1, p.second - 1).owned_by == ja) navnady.erase(navnady.find({p.first, p.second}));
+			if(gs.get_block(p.first - 1, p.second - 1).crossed_by == ja) navnady.erase(navnady.find({p.first, p.second}));
 			ohodnotenePolicka[p.first][p.second] += NAVNADA;
 		}
 		if(ja==0){
