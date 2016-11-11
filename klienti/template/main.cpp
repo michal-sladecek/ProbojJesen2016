@@ -14,14 +14,14 @@ const double STRACH = 400;
 const double STRACHINY = -10;
 const double AGRESIVITA = 2000;
 const double ODSEBA = -1000;
-const double KAMEN = 5;
+const double KAMEN = 1000;
 const double SPEED = -1000;
 const double NAVNADA = 3000;
 const double NUM_NAVNAD = 3;
 const double MIN_DIST = 2;
 const double MAX_DIST = 5;
 const double NEPRECHODNE = -10;
-
+const double NAVRAT = 1000000;
 int dx[]={-1, 0, 1, 0};
 int dy[]={0, 1, 0, -1};
 
@@ -273,10 +273,24 @@ int main() {
 		}
 		for (int x = 0; x < gs.width; x++) {
 			for (int y = 0; y < gs.height; y++) {
-				if (gs.get_block(x, y).owned_by == ja) ohodnotenePolicka[x + 1][y + 1] += currentLength*currentLength*STRACH;
+				if (gs.get_block(x, y).owned_by == ja) ohodnotenePolicka[x + 1][y + 1] += currentLength*STRACH;
 			}
 		}
-
+		vector<vector<int> > V = funkcia1(gs);
+		bool bojimSa = false;
+		for(auto p : gs.players){
+			if(V[p.position.x][p.position.y] < currentLength*3){
+				cerr << V[p.position.x][p.position.y] << "\n";
+				bojimSa = true;
+			}
+		}
+		if(bojimSa){
+			for (int x = 0; x < gs.width; x++) {
+				for (int y = 0; y < gs.height; y++) {
+					if (gs.get_block(x, y).owned_by == ja) ohodnotenePolicka[x + 1][y + 1] += NAVRAT;
+				}
+			}	
+		}
 		for(auto p: gs.players){
 			ohodnotenePolicka[p.position.x + 1][p.position.y + 1] += STRACHINY*currentLength*10;
 		}
@@ -286,17 +300,9 @@ int main() {
 			if(gs.get_block(p.first - 1, p.second - 1).crossed_by == ja) navnady.erase(navnady.find({p.first, p.second}));
 			ohodnotenePolicka[p.first][p.second] += NAVNADA;
 		}
-		if(ja==0){
-			for(auto p: ohodnotenePolicka){
-				for (auto q: p){
-					cerr << q << " ";
-				}
-				cerr << "\n";
-			}
-			cerr << "--------------------------\n";
-		}
 		vytrat(ohodnotenePolicka, 0.1, 15);
 		vector<pair<double, string> > dirs;
+		
 		if (x > 0 && gs.blocks[gs.block_index({x - 1, y})].crossed_by != ja && gs.get_block(x - 1, y).type != WALL){
 			dirs.push_back({ohodnotenePolicka[x][y+1],"LEFT"});
 		}
