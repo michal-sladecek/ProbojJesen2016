@@ -27,7 +27,7 @@ vector<vector<int> > distance(vector<vector<int> >&vstup)
     
     for(int i=0;i<r;++i)
     {
-        for(int j=0;j<r;++j)
+        for(int j=0;j<s;++j)
         {
             if(vstup[i][j] == 2)
             {
@@ -45,7 +45,7 @@ vector<vector<int> > distance(vector<vector<int> >&vstup)
         b=Q.front();Q.pop();
         c=Q.front();Q.pop();
         
-            for(int i=0;i<8;++i)
+            for(int i=0;i<4;++i)
             {
                 na = a+dx[i];
                 nb = b+dy[i];
@@ -62,27 +62,69 @@ vector<vector<int> > distance(vector<vector<int> >&vstup)
     return dist;
 }
 
-void vytratbfs(vector<vector<double> >)
+void vytratbfs(vector<vector<double> >&vstup, double konst, int iter)
 {
-     
-}
+    queue<int>Q;
+    double sum;
+    int num, ni, nj, r = vstup.size(), s=vstup[0].size();
+    vector<vector<double> >odpoved(r, vector<double>(s, 0));
 
+    double konstPren = konst;
+    vector<vector<int> > susedia(r,vector<int> (s,0));
+    for(int f=0;f<iter;++f)
+    {
+        
+        for(int i = 0;i<r;++i)
+        {
+            for(int j = 0;j<s;++j)
+            {
+                num = 0;
+                sum = 0.0;
+                for(int k = 0;k<4;++k)
+                {
+                    ni = i+dx[k];
+                    nj = j+dy[k];
+                    if(ni>=0 && nj>=0 && ni<r && nj<s)
+                    {
+                        sum += vstup[ni][nj];
+                        ++num;
+                    }
+                }
+                susedia[i][j] = num;
+                odpoved[i][j] += (sum);
+            }
+        }
+        
+        for(int i = 0;i<r;++i)
+        {
+            for(int j = 0;j<s;++j)
+            {
+                vstup[i][j] = (vstup[i][j]+konst*odpoved[i][j])/(konst*susedia[i][j]+1);
+                odpoved[i][j]=0;
+            }
+        }
+    }
+    
+}
+/*
 int main()
 {
-    ios_base::sync_with_stdio(false);
+    //ios_base::sync_with_stdio(false);
     ll r, s;
     cin >> r >> s;
-    vector<vector<int> >matica(r, vector<int>(s));
+    vector<vector<double> >matica(r, vector<double>(s, 0));
     for(int i=0;i<r;++i)for(int j=0;j<s;++j)cin>>matica[i][j];
     cout<<"odpoved1 : "<<endl;
-    matica = distance(matica);
+    vytratbfs(matica, 0.01, 10);
     for(int i=0;i<r;++i)
     {
         cout<<endl;
         for(int j=0;j<s;++j)
         {
-            cout<<matica[i][j]<<" ";
+            printf("%lf ", matica[i][j]);
+            //cout<<matica[i][j]<<" ";
         }
     }
     return 0;
 }
+*/
