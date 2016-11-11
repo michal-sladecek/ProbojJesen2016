@@ -10,9 +10,9 @@ using namespace std;
 
 int ja = -1;
 
-const double STRACH = 400;
+const double STRACH = 200;
 const double STRACHINY = -1000;
-const double AGRESIVITA = 10;
+const double AGRESIVITA = 1000;
 const double ODSEBA = -1000;
 const double KAMEN = 5;
 const double SPEED = -1000;
@@ -128,6 +128,7 @@ int main() {
 
     game_state gs;
 	set<pair<int,int> > navnady;
+	vector<pair<int,int> > pozicie;
     while (true) {
 		nacitaj(cin, gs);
 		vector<vector<double> > ohodnotenePolicka(gs.width + 2, vector<double> (gs.height + 2, 0));
@@ -135,8 +136,13 @@ int main() {
 
 		int x = gs.players[ja].position.x;
 		int y = gs.players[ja].position.y;
-
-		
+		pozicie.push_back({x,y});
+		if(pozicie.size() > 5){
+			int n = pozicie.size()-1;
+			if(pozicie[n-2] == pozicie[n]){
+				navnady = set<pair<int,int> > ();
+			}
+		}
 		if(navnady.size() <= NUM_NAVNAD){
 			vector<vector<int> > G(gs.width + 2,vector<int> (gs.height + 2));
 			for(int i=0;i<gs.width + 2; ++i){
