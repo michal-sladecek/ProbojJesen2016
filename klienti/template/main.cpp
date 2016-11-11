@@ -10,12 +10,12 @@ using namespace std;
 
 int ja = -1;
 
-const double STRACH = 3;
-const double AGRESIVITA = 100;
+const double STRACH = 50;
+const double AGRESIVITA = 10;
 const double ODSEBA = -100;
 const double KAMEN = 5;
 const double SPEED = 5;
-const double NAVNADA = 100;
+const double NAVNADA = 1000;
 const double NUM_NAVNAD = 5;
 const double MIN_DIST = 2;
 const double MAX_DIST = 5;
@@ -72,7 +72,50 @@ vector<vector<int> > distance(vector<vector<int> >&vstup)
     
     return dist;
 }
+void vytrat(vector<vector<double> >&vstup, double konst, int iter)
+{
+    queue<int>Q;
+    double sum;
+    int num, ni, nj, r = vstup.size(), s=vstup[0].size();
+    vector<vector<double> >odpoved(r, vector<double>(s, 0));
 
+    double konstPren = konst;
+    vector<vector<int> > susedia(r,vector<int> (s,0));
+    for(int f=0;f<iter;++f)
+    {
+        
+        for(int i = 0;i<r;++i)
+        {
+            for(int j = 0;j<s;++j)
+            {
+                num = 0;
+                sum = 0.0;
+                for(int k = 0;k<4;++k)
+                {
+                    ni = i+dx[k];
+                    nj = j+dy[k];
+                    if(ni>=0 && nj>=0 && ni<r && nj<s)
+                    {
+                        sum += vstup[ni][nj];
+                        ++num;
+                    }
+                }
+                susedia[i][j] = num;
+                odpoved[i][j] += (sum);
+            }
+        }
+        
+        for(int i = 0;i<r;++i)
+        {
+            for(int j = 0;j<s;++j)
+            {
+                vstup[i][j] = (vstup[i][j]+konst*odpoved[i][j])/(konst*susedia[i][j]+1);
+                odpoved[i][j]=0;
+            }
+        }
+    }
+    
+}
 
 int main() {
     srand(time(NULL));
@@ -175,6 +218,7 @@ int main() {
 			}
 			cerr << "--------------------------\n";
 		}
+		vytrat(ohodnotenePolicka, 0.1, 15);
 		vector<pair<double, string> > dirs;
 		if (x > 0 && gs.blocks[gs.block_index({x - 1, y})].crossed_by != ja && gs.get_block(x - 1, y).type != WALL){
 			dirs.push_back({ohodnotenePolicka[x][y+1],"LEFT"});
