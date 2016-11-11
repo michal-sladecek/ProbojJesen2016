@@ -10,16 +10,16 @@ using namespace std;
 
 int ja = -1;
 
-const double STRACH = 2;
-const double AGRESIVITA = 10;
-const double ODSEBA = -10;
+const double STRACH = 3;
+const double AGRESIVITA = 100;
+const double ODSEBA = -100;
 const double KAMEN = 5;
 const double SPEED = 5;
-const double NAVNADA = 10;
+const double NAVNADA = 100;
 const double NUM_NAVNAD = 5;
 const double MIN_DIST = 2;
 const double MAX_DIST = 5;
-
+const double NEPRECHODNE = -10;
 
 int dx[]={-1, 0, 1, 0};
 int dy[]={0, 1, 0, -1};
@@ -112,9 +112,7 @@ int main() {
 					else G[x + 1][y + 1] = 1;
 				}
 			}
-			cerr << "PRED DISTANCE\n";
 			vector<vector<int> > D = distance(G);
-			cerr << "PO DISTANCE\n";
 			vector<pair<int,int> > PP;
 			for (int x = 0; x < gs.width + 2; x++) {
 				for (int y = 0; y < gs.height + 2; y++) {
@@ -133,24 +131,24 @@ int main() {
 
 
 		for(int i=0;i<gs.width + 2; ++i){
-			ohodnotenePolicka[i][0] = -10;
-			ohodnotenePolicka[i][gs.height + 1] = -10;
+			ohodnotenePolicka[i][0] = NEPRECHODNE;
+			ohodnotenePolicka[i][gs.height + 1] = NEPRECHODNE;
 		}
 		for(int i=0;i<gs.height + 2; ++i){
-			ohodnotenePolicka[0][i] = -10;
-			ohodnotenePolicka[gs.height + 1][i] = -10;
+			ohodnotenePolicka[0][i] = NEPRECHODNE;
+			ohodnotenePolicka[gs.height + 1][i] = NEPRECHODNE;
 		}
 
 		for (int x = 0; x < gs.width; x++) {
 			for (int y = 0; y < gs.height; y++) {
 				char c = '.';
-				if (gs.get_block(x, y).type == WALL) ohodnotenePolicka[x + 1][y + 1] = -1;
+				if (gs.get_block(x, y).type == WALL) ohodnotenePolicka[x + 1][y + 1] = NEPRECHODNE;
 				else if (gs.get_block(x, y).crossed_by == ja){
 					ohodnotenePolicka[x + 1][y + 1] += ODSEBA;
 					++currentLength;
 				}
 				else if (gs.get_block(x, y).crossed_by != -1) ohodnotenePolicka[x + 1][y + 1] += AGRESIVITA;
-				else ohodnotenePolicka[x + 1][y + 1] = 10;
+				else ohodnotenePolicka[x + 1][y + 1] = 0;
 				
 			}
 		}
