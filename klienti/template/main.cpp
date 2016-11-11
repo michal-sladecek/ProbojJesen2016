@@ -118,6 +118,66 @@ void vytrat(vector<vector<double> >&vstup, double konst, int iter)
     
 }
 
+
+vector<vector<int> > funkcia1(game_state vstup)
+{
+    queue<int>Q;
+    int a, b, c, na, nb, r=vstup.width, s=vstup.height;
+    vector<vector<int> >mat1(r, vector<int>(s, -1));
+    
+    /*for(int i=0;i<vstup.players.size();++i)
+    {
+        mat1[vstup.players[i].position.x][vstup.players[i].position.y]=2;
+    }*/
+    
+    block actual;
+    
+    for(int i = 0;i<r;++i)
+    {
+        for(int j = 0;j<s;++j)
+        {
+            actual = vstup.get_block(i, j);
+            if(actual.crossed_by == ja)
+            {
+                //mat1[vstup.players[ja].position.x][vstup.players[ja].position.y];
+                Q.push(i);
+                Q.push(j);
+                Q.push(0);
+            }
+        }
+    }
+
+    while(!Q.empty())
+    {
+        a=Q.front();Q.pop();
+        b=Q.front();Q.pop();
+        c=Q.front();Q.pop();
+        
+        //actual = vstup.get_block(a, b);
+        
+        if(mat1[a][b] == -1)
+        {
+            mat1[a][b]=c;
+            for(int k=0;k<4;++k)
+            {
+                na=a+dx[k];
+                nb=b+dy[k];
+                if(na>=0 && nb>=0 && na<vstup.width && nb<vstup.height && mat1[na][nb] == -1)
+                {
+                    Q.push(na);
+                    Q.push(nb);
+                    Q.push(c+1);
+                }
+            }
+        }
+    }
+    
+    return mat1;
+}
+
+
+
+
 int main() {
     srand(time(NULL));
 
@@ -127,6 +187,7 @@ int main() {
  //   cerr << ja << endl;
 
     game_state gs;
+        vector<vector<int> >prve;
 	set<pair<int,int> > navnady;
 	vector<pair<int,int> > pozicie;
     while (true) {
@@ -134,6 +195,14 @@ int main() {
 		vector<vector<double> > ohodnotenePolicka(gs.width + 2, vector<double> (gs.height + 2, 0));
 		int currentLength = 0;
 
+                prve = funkcia1(gs);
+                
+                for(int i = 0;i<gs.players.size();++i)
+                {
+                    //cerr<<"Od "<<i<<" som "<< prve[gs.players[i].position.x][gs.players[i].position.y]<<endl;
+                    //vypise ako daleko su hlavy od tvoho tela
+                }
+                
 		int x = gs.players[ja].position.x;
 		int y = gs.players[ja].position.y;
 		pozicie.push_back({x,y});
